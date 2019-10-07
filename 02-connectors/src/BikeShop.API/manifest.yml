@@ -1,0 +1,12 @@
+---
+applications:
+-   name: BikeShop-API-JW
+    buildpacks:
+    - dotnet_core_buildpack
+    memory: 128m
+    disk_quota: 256m
+    random-route: true
+    stack: cflinuxfs3
+    timeout: 180
+    services:
+    - mysql

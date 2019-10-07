@@ -1,110 +1,95 @@
-# Cloud-Native Bike Shop (.NET Core)
+# Workshop Prerequisites
 
-This project includes hands-on labs that build out an example "bike shop"
-API. For the Spring Boot version of this bike shop API, see the [BikeShopAPISpring repo](https://github.com/Magenic/BikeShopAPISpring).
-For the UI that works against both the Spring-based and .NET Core-based APIs, see
-[BikeShopUIAngular repo](https://github.com/Magenic/BikeShopUIAngular.
+## .NET Core
 
-## Requirements
+Usually we install the latest version of the .NET Core SDK. However, we should check which versions of .NET Core are supported by the build packs we'll be using. In a corporate install, you may need to contact your PCF administrator for this info.
 
-To do each of the labs, you should have the following installed and configured:
+### 1. Check for the .NET Core versions supported by the latest build-pack
+Check for the .NET Core versions supported by the latest build-pack.
 
-1. An IDE or text editor, such as:
-   1. VS Code
-   1. Atom
-1. .NET Core 2.2.x
-1. The [CloudFoundry CLI](https://docs.run.pivotal.io/cf-cli/install-go-cli.html).
+<https://buildpacks.cloudfoundry.org/#/buildpacks>
 
-## Overview
+### 2. Download the latest supported version
+Again, don't use a version that is too new. In this workshop we'll use 2.2.402 release.
 
-The project works through building the API in the following steps:
+<https://dotnet.microsoft.com/download>
 
-1. Setup
-1. Connectors
-1. Configuration
-1. Management
-1. Circuit Breaking
-1. Swagger
+## CF CLI
 
-Each of these steps builds on the one before it, so it is best to
-do them in the order shown. However, each lab is designed to stand
-alone.
+### 3. Download and install the Cloud Foundry CLI
+Install the latest version of the CF CLI.
 
-### Setup
+<https://docs.run.pivotal.io/cf-cli/install-go-cli.html>
 
-The objective of this lab is to demonstrate a basic project with only a minimal, basic
-controller that mirrors the _ValuesController_ in a brand new .NET API project.
+NOTE: If you are having trouble installing the CLI on Linux via Bash, here is an alternative method:
 
-When complete, you will have a simple REST API with the endpoint `/api/values` that
-you can view both locally and deployed to Pivotal Cloud Foundry (PCF)!
+### 3.1 Navigate to /etc/apt in the linux filesystem and open up the 'sources.list' file. We will be adding the package repository manually.
+Add the follow line to the end of the 'sources.list' file:
+```bash
+   deb <https://packages.cloudfoundry.org/debian> stable main
+```
 
-### Connectors
+### 3.2 Open <https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key> and save as a .key file.
 
-Continuing from "Setup", the objective of this lab is to build on the Setup lab by adding a model,
-repository, service, and new controller for handling the new _Bicycle_ class.
+### 3.3 Navigate in bash to the location of the .key file added in the previous step. Run the following command:
+```bash
+sudo apt-key add cli.cloudfoundry.org.key
+```
 
-When complete, you will have a simple REST API with bicycle endpoints at
-`/api/bicycle` to expose Create, Read, Update, and Delete (CRUD) operations.
+### 3.4 Update your packages in Windows Bash:
+```bash
+sudo apt-get update
+```
 
-In the lab, you will deploy the API to PCF.
+### 3.5 Finally, run:
+```bash
+sudo apt-get install cf-cli
+```
 
-### Configuration
+### 3.6 Verify that you have an up-to-date version e.g. 6.46.xxx
+```shell
+cf --version
+```
 
-Continuing from "Connectors", the objective of this lab is to demonstrate how to
-use the a configuration service in PCF. Using a configuration service enables you to
-externalize your configuration, which is one of the factors in
-[The Twelve-Factor App](https://12factor.net/).
+## An Editor (Visual Studio Code)
+We'll use VS Code in this workshop.
 
-When complete, you will have a REST API that uses configurable values loaded from
-an external configuration source.
+NOTE: You can use another editor, but will likely need to change a few things in each lab e.g. to get debugging to work.
 
-### Management
+### 4. Download and install Visual Studio Code
+Install the latest version of Visual Studio Code.
 
-Continuing from "Configuration", the objective of this lab is to demonstrate how to
-enable the management endpoints in your Spring Boot-based REST API.
+NOTE: The per-user install is now recommended.
 
-When complete, you will call new endpoints in your REST API to view information
-about the state of your application, such as health and information endpoints.
+<https://code.visualstudio.com/>
 
-### Circuit Breaking
+The following VS Code plug-ins are used in this workshop. You may be prompted for them if they are not installed. Versions below as of 2019-09-14.
 
-Continuing from "Management", the objective of this lab is to demonstrate how to
-use [Netflix's Hystrix library](https://github.com/Netflix/Hystrix) to provide a
-"[CircuitBreaker](https://martinfowler.com/bliki/CircuitBreaker.html)" for
-elegantly handling errors in a cloud-native application.
+#### 4.1 Get the latest C# plug-in
+Available via search in the extensions manager in VS Code. 
 
-When complete, you will be able to see the circuit breaker in action to handle
-errors gracefully.
+C# - Microsoft (v1.21.2) - Necessary for full (local) run & debug support
 
-### Swagger
+## Database
 
-Continuing from "Circuit Breaking", the objective of this final lab is to
-demonstrate how a finished product should look with JUnit tests, unit test
-coverage reporting, Checkstyle reporting, and generated Swagger documentation.
+### 5. Download and install MySQL
+NOTE: If you're running Docker, there is a Docker image provided by the SteelToe team that may do the trick.
 
-When complete, you will have an cloud-native API using best practices.
+<https://dev.mysql.com/downloads/>
 
-## Building the labs
+You don't need to install this locally unless you want a fully-functional local dev experience.
+The Docker image mentioned above has not (yet) been tested with these labs.
 
-TODO
+## Logging in to PCF
 
-## Running the labs
+### 6. Test your account
+You can pass your credentials as parameters if you wish.
+```bash
+cf login -a https://api.run.pivotal.io
+```
 
-Each of the labs are designed to run locally as well as in
-[Pivotal Cloud Foundry (PCF)](https://docs.pivotal.io/pivotalcf/2-6/concepts/overview.html).
-The details of running each step are provided in the `README`
-document in each of the directories. For example, to learn how to
-build and test the very first example, see [Setup's README](./01-setup/README.md).
+You should be prompted for your email and password.
 
-## Testing the API
+## Next Steps
 
-The APIs can be tested using any utility that is used for testing REST APIs, such
-as [`curl`](https://curl.haxx.se/), [`wget`](https://www.gnu.org/software/wget/),
-or [`http`](https://httpie.org/). Further details can be found in the `README` documents
-located in each lab's directory.
-
-## Deploying the labs
-
-The code in the labs can be executed both locally and in PCF. See the `README`
-documents located in each lab's directory for more information about running each
-lab.
+Next, we will start in on the labs.
